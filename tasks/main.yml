@@ -16,5 +16,7 @@
   systemd:
     name: "ssh_tunnel_{{item.key}}"
     state: restarted
+    daemon_reload: yes
     enabled: yes
   with_dict: "{{ssh_tunnels}}"
+

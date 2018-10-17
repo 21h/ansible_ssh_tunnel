@@ -1,0 +1,13 @@
+version: '1.0.0'
+name: ssh_tunnel
+description: your description
+bindable: False
+async: optional
+metadata:
+  displayName: ssh_tunnel
+plans:
+  - name: default
+    description: This default plan deploys ssh_tunnel
+    free: True
+    metadata: {}
+    parameters: []
