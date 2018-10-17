@@ -1,0 +1,24 @@
+[Unit]
+Description=SSH tunnel to {{item.key}}
+Documentation=man:ssh(1)
+Wants=ssh-agent.service
+After=network.target ssh.service
+
+[Service]
+Type=simple
+
+Environment="LOCAL_ADDR={{item.value.SSH_TUNNEL_LOCAL_HOST}}"
+Environment="LOCAL_PORT={{item.value.SSH_TUNNEL_LOCAL_PORT}}"
+Environment="REMOTE_HOST={{item.value.SSH_TUNNEL_REMOTE_HOST}}"
+Environment="REMOTE_PORT={{item.value.SSH_TUNNEL_REMOTE_PORT}}"
+
+ExecStart=/usr/bin/ssh -t -NT -i {{item.value.SSH_TUNNEL_KEY}} \
+  -o ExitOnForwardFailure=yes -o ServerAliveInterval=60 \
+  -L ${LOCAL_PORT}:${LOCAL_ADDR}:${REMOTE_PORT} ${REMOTE_HOST}
+RestartSec=10
+Restart=on-success
+RestartForceExitStatus=255
+
+[Install]
+WantedBy=multi-user.target
+

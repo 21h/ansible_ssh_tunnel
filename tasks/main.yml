@@ -1,0 +1,20 @@
+---
+- name: Copy ssh tunnel files
+  template:
+    src: ssh_tunnel.service.j2
+    dest: /etc/systemd/system/ssh_tunnel_{{item.key}}.service
+  with_dict: "{{ssh_tunnels}}"
+
+- name: Add remote host to known_hosts file
+  known_hosts:
+    path: /root/.ssh/known_hosts
+    key: "{{item.value.SSH_TUNNEL_REMOTE_HOST_FINGERPRINT}}"
+    name: "{{item.value.SSH_TUNNEL_REMOTE_HOST}}"
+  with_dict: "{{ssh_tunnels}}"
+
+- name: Try to start ssh tunnel
+  systemd:
+    name: "ssh_tunnel_{{item.key}}"
+    state: restarted
+    enabled: yes
+  with_dict: "{{ssh_tunnels}}"
