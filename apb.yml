@@ -1,6 +1,6 @@
-version: '1.0.0'
+version: '1.0.1'
 name: ssh_tunnel
-description: your description
+description: Role for fast creating SSH tunnels
 bindable: False
 async: optional
 metadata:
